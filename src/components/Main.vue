@@ -77,7 +77,7 @@ const { currentStep, steps, stepsTotal } = storeToRefs(store)
 }
 
 .service-item-body {
-  height: 220px;
+  min-height: 220px;
   display: flex;
   gap: 12px;
 }
@@ -100,6 +100,12 @@ const { currentStep, steps, stepsTotal } = storeToRefs(store)
 }
 .service-item-description span {
   line-height: 1.2;
+}
+
+.service-item-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .service-item-controls {

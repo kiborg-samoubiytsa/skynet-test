@@ -68,19 +68,21 @@ const handleItemsConfirm = (e: Event) => {
       }}
       ₽
     </h4>
-    <div class="service-item-options" v-if="variant.options.length > 0">
-      <div class="service-item-control" v-for="(option, i) in variant.options">
-        <input
-          type="checkbox"
-          :id="i.toString()"
-          @change="handleCheckboxChange(option)"
-          :disabled="
-            selectedItems.isConfirmed &&
-            _selectedItems[currentStep - 1]?.variant?.title == props.variant.title
-          "
-          :checked="selectedItems.items.some((e) => e.title == option.title)"
-        />
-        <label :for="i.toString()">{{ option.title }}</label>
+    <div class="service-item-wrapper" v-if="variant.options.length > 0">
+      <div class="service-item-options">
+        <div class="service-item-control" v-for="(option, i) in variant.options">
+          <input
+            type="checkbox"
+            :id="i.toString()"
+            @change="handleCheckboxChange(option)"
+            :disabled="
+              selectedItems.isConfirmed &&
+              _selectedItems[currentStep - 1]?.variant?.title == props.variant.title
+            "
+            :checked="selectedItems.items.some((e) => e.title == option.title)"
+          />
+          <label :for="i.toString()">{{ option.title }}</label>
+        </div>
       </div>
       <button
         @click=""
@@ -99,31 +101,30 @@ const handleItemsConfirm = (e: Event) => {
         }}
       </button>
     </div>
-    <div
-      class="service-item-options"
-      v-if="variant.select.length > 0"
-      v-for="(select, selectIndex) in variant.select"
-    >
-      <p>{{ select.title }}</p>
-      <select
-        @change="handleSelectChange($event, selectIndex)"
-        class="service-item-control"
-        required
-        :disabled="
-          selectedItems.isConfirmed &&
-          _selectedItems[currentStep - 1]?.variant?.title == props.variant.title
-        "
-      >
-        <option value="" disabled selected>--Выберите опцию--</option>
-        <option
-          :id="i.toString()"
-          v-for="(option, i) in select.items"
-          :value="JSON.stringify(option)"
-          :selected="selectedItems.items.some((e) => e.title == option.title)"
+    <div class="service-item-wrapper" v-if="variant.select.length > 0">
+      <div class="service-item-options" v-for="(select, selectIndex) in variant.select">
+        <p>{{ select.title }}</p>
+        <select
+          :key="selectIndex"
+          @change="handleSelectChange($event, selectIndex)"
+          class="service-item-control"
+          required
+          :disabled="
+            selectedItems.isConfirmed &&
+            _selectedItems[currentStep - 1]?.variant?.title == props.variant.title
+          "
         >
-          {{ option.title }}
-        </option>
-      </select>
+          <option value="" disabled selected>--Выберите опцию--</option>
+          <option
+            :id="i.toString()"
+            v-for="(option, i) in select.items"
+            :value="JSON.stringify(option)"
+            :selected="selectedItems.items[selectIndex]?.title == option.title"
+          >
+            {{ option.title }}
+          </option>
+        </select>
+      </div>
       <button
         type="submit"
         @click=""
