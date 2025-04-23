@@ -2,7 +2,7 @@
 import { useWizardStore } from '@/stores/wizard'
 import type { Option, Variant } from '@/types'
 import { storeToRefs } from 'pinia'
-import { ref, type Ref } from 'vue'
+import { computed, ref, type Ref } from 'vue'
 
 interface Props {
   variant: Variant
@@ -37,7 +37,15 @@ const handleCheckboxChange = (option: Option) => {
 }
 
 const handleSelectChange = (event: Event, selectIndex: number) => {
-  const option = JSON.parse((event.target as HTMLInputElement)?.value)
+  const itemIndex = parseInt((event.target as HTMLInputElement)?.value)
+
+  const step = steps.value[currentStep.value - 1]
+
+  const variant = step.variants[props.variantIndex]
+
+  const select = variant.select[selectIndex]
+
+  const option = select.items[itemIndex]
 
   selectedItems.value.items[selectIndex] = option
 }
@@ -79,6 +87,7 @@ const handleItemsConfirm = (e: Event) => {
               selectedItems.isConfirmed &&
               _selectedItems[currentStep - 1]?.variant?.title == props.variant.title
             "
+            :value="i"
             :checked="selectedItems.items.some((e) => e.title == option.title)"
           />
           <label :for="i.toString()">{{ option.title }}</label>
@@ -118,7 +127,7 @@ const handleItemsConfirm = (e: Event) => {
           <option
             :id="i.toString()"
             v-for="(option, i) in select.items"
-            :value="JSON.stringify(option)"
+            :value="i"
             :selected="selectedItems.items[selectIndex]?.title == option.title"
           >
             {{ option.title }}
